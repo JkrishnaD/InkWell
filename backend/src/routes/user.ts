@@ -1,3 +1,4 @@
+import { signInInputs, signUpInputs } from '@jaya5063/inkwell-common/dist/zod';
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";

@@ -4,7 +4,7 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
-    "@jaya5063/inkwell-common": "^1.0.0",
+    "@jaya5063/inkwell-common": "^1.0.1",
     "@prisma/client": "^5.15.0",
     "@prisma/extension-accelerate": "^1.1.0",
     "cors": "^2.8.5",
