@@ -18,6 +18,11 @@ userRouter.post("/signin", async (c) => {
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const body = await c.req.json();
+    const success = signInInputs.safeParse(body)
+    if (!success) {
+        c.status(403)
+        return c.text("Invalid Inputs")
+    }
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -43,6 +48,11 @@ userRouter.post("/signup", async (c) => {
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const body = await c.req.json();
+    const success = signUpInputs.safeParse(body);
+    if (!success) {
+        c.status(403)
+        return c.text("Invalid Inputs")
+    }
     try {
         const user = await prisma.user.create({
             data: {

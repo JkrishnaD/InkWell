@@ -4,11 +4,13 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@jaya5063/inkwell-common": "^1.0.0",
     "@prisma/client": "^5.15.0",
     "@prisma/extension-accelerate": "^1.1.0",
     "cors": "^2.8.5",
     "hono": "^4.4.4",
-    "prisma": "^5.15.0"
+    "prisma": "^5.15.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
