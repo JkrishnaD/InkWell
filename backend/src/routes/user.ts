@@ -18,17 +18,20 @@ userRouter.post("/signin", async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
+
     const body = await c.req.json();
+
     const success = signInInputs.safeParse(body)
     if (!success) {
         c.status(403)
         return c.text("Invalid Inputs")
     }
+
     try {
         const user = await prisma.user.findUnique({
             where: {
                 email: body.email,
-                password: body.email,
+                password: body.password,
             }
         })
         if (!user) {
@@ -37,7 +40,9 @@ userRouter.post("/signin", async (c) => {
                 msg: "Invalid User"
             })
         }
+
         const token = await sign({ id: user?.id }, c.env.JWT_SECRET);
+
         return c.text(token)
     } catch {
         return c.text("error while signing in!!")
@@ -48,13 +53,26 @@ userRouter.post("/signup", async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
+
     const body = await c.req.json();
+
     const success = signUpInputs.safeParse(body);
     if (!success) {
         c.status(403)
         return c.text("Invalid Inputs")
     }
+
     try {
+        const exist = await prisma.user.findUnique({
+            where: {
+                email: body.email
+            }
+        })
+        if (exist) {
+            c.status(403)
+            return c.text("User Already Exists")
+        }
+
         const user = await prisma.user.create({
             data: {
                 email: body.email,
@@ -62,16 +80,16 @@ userRouter.post("/signup", async (c) => {
                 password: body.password,
             },
         });
+
         if (!user) {
-            console.log("if condition");
             c.status(403)
             return c.json({
                 msg: "invalid User"
             })
         }
-        console.log("token generation");
+
         const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-        console.log(token);
+
         return c.text(token)
     } catch (error) {
         return c.json({

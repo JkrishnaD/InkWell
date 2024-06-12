@@ -15,17 +15,21 @@ export const blogRouter = new Hono<{
 }>();
 
 blogRouter.use("/*", async (c, next) => {
+
     const jwt = c.req.header("Authorization") || "";
     if (!jwt) {
         c.status(403);
         return c.json({ error: "token is not provided" });
     }
+
     const token = jwt;
+
     const verification = await verify(token, c.env.JWT_SECRET);
     if (!verification) {
         c.status(403);
         return c.json({ error: "unAuthorized" });
     }
+
     //@ts-ignore
     c.set("userId", verification.id as string);
     await next();
@@ -42,9 +46,11 @@ blogRouter.post("/", async (c) => {
         c.status(403)
         return c.text("Invalid Inputs")
     }
+
     // @ts-ignore
     const authorId = c.get("userId");
     try {
+
         const blog = await prisma.post.create({
             data: {
                 title: body.title,
@@ -71,6 +77,7 @@ blogRouter.put("/", async (c) => {
         c.status(403)
         return c.text("Invalid Inputs")
     }
+    
     try {
         const blog = await prisma.post.update({
             where: {
