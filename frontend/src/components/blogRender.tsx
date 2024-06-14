@@ -1,37 +1,39 @@
-import { Link } from "react-router-dom";
+import { Blog } from "../hooks"
+import { Appbar } from "./AppBar"
+import { Avatar } from "./blogsRender"
 
-interface BlogProps {
-    authurName: string,
-    title: string,
-    content: string,
-    date: string
-    id :string
-}
-
-export function BlogRender({ authurName, title, content, date,id }: BlogProps) {
-    return <Link to={`/blog/${id}`}>
-     <div className="border-b border-slate-300 p-3">
-        <div className="flex pb-1">
-            <div className="flex justify-center flex-col">
-                <Avatar size={"small"} name={authurName} />
+export const BlogRender = ({ blog }: { blog: Blog }) => {
+    return <div>
+        <Appbar />
+        <div className="flex justify-center">
+            <div className="grid grid-cols-12 px-10 w-full pt-200 max-w-screen-xl pt-12">
+                <div className="col-span-8">
+                    <div className="text-5xl font-extrabold">
+                        {blog.title}
+                    </div>
+                    <div className="text-xs bg-gray-300 rounded-xl w-fit p-2 mt-2">
+                        {Math.ceil(blog.content.length / 600)} min read
+                    </div>
+                    <div className="pt-4 mt-2">
+                        {blog.content}
+                    </div>
+                </div>
+                <div className="col-span-3">
+                    <div className="flex justify-center text-slate-600 text-lg">
+                        Author
+                    </div>
+                    <div className="flex w-full mt-1">
+                        <div className="pr-4 ">
+                            <Avatar size="big" name={blog.author.name || "Anonymous"} />
+                        </div>
+                        <div>
+                            <div className="text-xl font-bold">
+                                {blog.author.name || "Anonymous"}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="font-normal pl-2 ">
-                {authurName}
-            </div>
-            <div className="font-extralight pl-2"> : {date}</div>
         </div>
-        <div className="font-bold text-2xl">
-            {title}
-        </div>
-        <div className="font-thin text-md">
-            {content.slice(0, 100) + "....."}
-        </div>
-    </div>
-    </Link>
-}
-
-export function Avatar({ name, size = "small" }: { name: string; size: "small" | "big" }) {
-    return <div className={`relative inline-flex items-center justify-center ${size === "small" ? "w-8 h-8" : "w-10 h-10"}overflow-hidden bg-gray-100 rounded-full dark:bg-black p-1`}>
-        <span className={`${size === "small" ? "text-sm" : "text-xl"} font-medium text-white dark:text-white}`}>{name[0]}</span>
     </div>
 }

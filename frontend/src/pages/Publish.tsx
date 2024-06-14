@@ -10,11 +10,11 @@ export function Publish() {
     const navigate = useNavigate()
     return <div>
         <Appbar />
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full mt-8">
             <div className="max-w-screen-lg w-full">
                 <input onChange={(e) => setTitle(e.target.value)} placeholder="Title..." id="large-input" className="w-full font-bold p-2 h-20 mt-2 text-gray-900 rounded-lg bg-gray-50 text-3xl  focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
                 <div className="w-full mb-4 rounded-lg bg-gray-50 focus:border-blue-500 ">
-                    <div className="py-2 bg-white rounded-t-lg ">
+                    <div className="py-2 bg-white rounded-t-lg mt-4">
                         <textarea onChange={(e) => setDescription(e.target.value)} id="comment" rows={8} className="focus:outline-none w-full p-2 px-0 text-base  bg-gray-50" placeholder="Add Your Story...." required ></textarea>
                     </div>
                 </div>

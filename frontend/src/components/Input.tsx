@@ -11,14 +11,23 @@ export function Login({ type }: { type: "signin" | "signup" }) {
         email: ""
     });
     const navigate = useNavigate();
+    const [error, setError] = useState<string | null>(null);
     async function sendRequest() {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user${type === "signin" ? "/signin" : "/signup"}`, postInputs);
             const jwt = response.data;
             localStorage.setItem("token", jwt);
             navigate("/blogs")
-        } catch (error) {
+        } catch (error: any) {
+            if (error.response) {
+                setError(error.response.data)
+            } else {
+                setError("Something Went Wrong")
+            }
             alert("Invalid User!!")
+            return <div>
+                <p className="text-red-500 font-bold text-center mb-2">{error}</p>
+            </div>
         }
     }
 
@@ -28,7 +37,7 @@ export function Login({ type }: { type: "signin" | "signup" }) {
                 <div className="font-bold text-2xl flex justify-center">
                     {type === "signin" ? "Login" : "Create An Account"}
                 </div>
-                <div className="text-slate-400">
+                <div className="text-slate-400 w-fit">
                     {type === "signin" ? "Create New Account" : "Already Have An Account"}
                     <Link to={type === "signin" ? "/signup" : "/signin"} className="px-1 underline">{type === "signin" ? "signup" : "signin"}</Link>
                 </div>
@@ -51,9 +60,13 @@ export function Login({ type }: { type: "signin" | "signup" }) {
                         password: e.target.value
                     })
                 }} />
+                {error && (
+                    <p className="text-red-500 font-bold text-center mb-2">{error}</p>
+                )}{" "}
             </div>
             <div>
                 <button onClick={sendRequest} type="button" className="w-full mt-5 py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-black dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">{type === "signup" ? "Sign Up" : "Sign In"}</button>
+
             </div>
         </div>
     </div>
