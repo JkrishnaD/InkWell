@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { signUpType } from "@jaya5063/inkwell-common/dist/zod"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
@@ -12,14 +12,20 @@ export function Login({ type }: { type: "signin" | "signup" }) {
     });
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const jwt = localStorage.getItem("token");
+        if (jwt) {
+            navigate("/blogs")
+        }
+    })
+
     async function sendRequest() {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user${type === "signin" ? "/signin" : "/signup"}`, postInputs);
             const jwt = response.data;
             localStorage.setItem("token", jwt);
-            if (jwt) {
-                navigate("/blogs")
-            }
+            navigate("/blogs")
         } catch (error: any) {
             if (error.response) {
                 setError(error.response.data)

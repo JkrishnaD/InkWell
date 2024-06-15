@@ -4,6 +4,7 @@ export function Logout() {
     const navigate = useNavigate();
     
     async function logout() {
+        localStorage.setItem("token","")
         navigate("/signin");
     }
 
